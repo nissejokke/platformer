@@ -1,12 +1,18 @@
+import { Man } from "./man.js";
+
 export function draw() {
-    var canvas = document.getElementById('canvas') as HTMLCanvasElement;
-    if (canvas?.getContext) {
-      var ctx = canvas.getContext('2d')!;
+  var canvas = document.getElementById("canvas") as HTMLCanvasElement;
+  if (!canvas?.getContext) return;
 
-      ctx.fillStyle = 'rgb(200, 0, 0)';
-      ctx.fillRect(10, 10, 50, 50);
-
-      ctx.fillStyle = 'rgba(0, 0, 200, 0.5)';
-      ctx.fillRect(30, 30, 50, 50);
-    }
-  }
+  var ctx = canvas.getContext("2d")!;
+  // ctx.beginPath();
+  // const c = 50;
+  // ctx.moveTo(c, c);
+  // ctx.lineTo(c + 25, c + 25);
+  // ctx.lineTo(c, c + 50);
+  // ctx.moveTo(c, c);
+  // ctx.lineTo(c - 75, c + 75);
+  // ctx.stroke();
+  const man = new Man(ctx, 250, 250);
+  man.draw();
+}
