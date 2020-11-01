@@ -10,7 +10,14 @@ export async function draw() {
   var ctx = canvas.getContext("2d")!;
   const world = new World(ctx, canvas);
   const man = new Man(ctx, 250, 250);
-  const ground = new Obstacle(0, canvas.offsetHeight - 30, canvas.width, 30);
+  const ground = new Obstacle(
+    ctx,
+    0,
+    canvas.offsetHeight - 30,
+    canvas.width,
+    30,
+    -1
+  );
   world.add(man);
   world.add(ground);
 

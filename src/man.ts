@@ -1,4 +1,5 @@
 import { Objct, Point } from "./common.js";
+import Vector from "./vector.js";
 
 export interface HumanJoints {
   head: Point;
@@ -32,6 +33,8 @@ export class Man implements Objct {
   y: number;
   width: number;
   height: number;
+  mass: number;
+  force: Vector;
   constructor(private ctx: CanvasRenderingContext2D, x: number, y: number) {
     this.poses = [
       new Pose({
@@ -89,9 +92,13 @@ export class Man implements Objct {
     this.height = 50;
     this.scale = 0.1;
     this.currentPose = 0;
+    this.mass = 10;
+    this.force = new Vector(0, 0);
   }
+  collision(obj1: Objct, obj2: Objct): void {}
 
   draw() {
+    this.ctx.strokeRect(this.x, this.y, this.width, this.height);
     const pose = this.poses[this.currentPose];
     this.ctx.beginPath();
     const joint = pose.joints;
@@ -182,7 +189,7 @@ export class Man implements Objct {
   }
 
   move(dx: number, dy: number) {
-    this.x += dx;
-    this.y += dy;
+    // this.x += dx;
+    // this.y += dy;
   }
 }
