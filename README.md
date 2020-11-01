@@ -1,11 +1,10 @@
 Platformer
 -----
 
-Experimenting with game physics. Use keyboard arrows to run around. 
+Experimenting with game physics on html canvas. Use keyboard arrows to run around. Hardly playable yet.
 
-![Platformer screenshot](./screenshot.png)
+![Platformer screenshot](./platformer.gif)
 
-Warning: still not usable as is.
 
 ### TODO:
   - [ ] Apply jumping force only when in contact with fixed object
