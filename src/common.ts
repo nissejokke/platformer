@@ -14,6 +14,10 @@ export interface Mass {
   mass: number;
 }
 
+export interface GroundMovable {
+  groundForce: Vector;
+}
+
 export interface Objct extends Point, Size, Mass {
   force: Vector;
   draw(): void;

@@ -1,4 +1,4 @@
-import { Objct, delay, Point } from "./common.js";
+import { Objct, delay, Point, GroundMovable } from "./common.js";
 import Vector from "./vector.js";
 
 export class World {
@@ -24,11 +24,11 @@ export class World {
     for (const obj of this.objs) {
       this.addForces(obj);
     }
+    for (const obj of this.objs) this.updatePosition(obj);
     for (const obj of this.objs) {
       this.addObjectToCollisionMap(obj);
     }
     for (const obj of this.objs) {
-      this.updatePosition(obj);
       obj.draw();
     }
     await delay(25);
@@ -42,6 +42,14 @@ export class World {
   updatePosition(obj: Objct) {
     obj.x += obj.force.x;
     obj.y += obj.force.y;
+
+    // wrap y
+    if (obj.y < 0) obj.y += this.canvas.offsetHeight;
+    if (obj.y > this.canvas.offsetHeight) obj.y -= this.canvas.offsetHeight;
+
+    // wrap x
+    if (obj.x < 0) obj.x += this.canvas.offsetWidth;
+    if (obj.x > this.canvas.offsetWidth) obj.x -= this.canvas.offsetWidth;
   }
 
   resetCollisionMap() {
@@ -58,9 +66,12 @@ export class World {
       for (let y = obj.y; y < obj.y + obj.height; y += stepY) {
         const xx = Math.round(this.collisionSize * (x / worldWidth));
         const yy = Math.round(this.collisionSize * (y / worldHeight));
-        if (this.collisionMap[xx][yy])
-          this.collision(this.collisionMap[xx][yy], obj);
-        this.collisionMap[xx][yy] = obj;
+
+        if (xx >= 0 && xx < this.collisionMap.length) {
+          if (this.collisionMap[xx][yy])
+            this.collision(this.collisionMap[xx][yy], obj);
+          this.collisionMap[xx][yy] = obj;
+        }
       }
     }
   }
@@ -83,17 +94,28 @@ export class World {
         ),
       ];
     };
-    const interactWithFixedObject = (vector: Vector) => {
-      // friction and collision with fixed object
-      vector.multiply(new Vector(0.9, 0));
+    const isGroundMovable = (obj: any): obj is GroundMovable => {
+      return "groundForce" in obj;
+    };
+    const interactWithFixedObject = (obj: Objct) => {
+      // collision with fixed object
+      obj.force.y = 0;
+
       // compansate for clipping into object
-      vector.add(new Vector(0, -distance(obj1, obj2)[1] * 0.5));
+      //   obj.force.add(new Vector(0, -distance(obj1, obj2)[1] * 0.5));
+      obj.y += -distance(obj1, obj2)[1] * 0.5;
+
+      // if in concat with ground, add movement
+      if (isGroundMovable(obj)) obj.force.add(obj.groundForce);
+
+      // friction
+      obj.force.x *= 0.9;
     };
 
     if (obj1.mass === -1) {
-      interactWithFixedObject(obj2.force);
+      interactWithFixedObject(obj2);
     } else if (obj2.mass === -1) {
-      interactWithFixedObject(obj1.force);
+      interactWithFixedObject(obj1);
     } else {
     }
   }

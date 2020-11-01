@@ -7,6 +7,22 @@ export async function draw() {
   var canvas = document.getElementById("canvas") as HTMLCanvasElement;
   if (!canvas?.getContext) return;
 
+  const keys: Record<string, boolean> = {};
+  document.addEventListener("keydown", (e: KeyboardEvent) => {
+    if (e.code === "ArrowUp") {
+      if (keys[e.code] === undefined) keys[e.code] = true;
+      else keys[e.code] = false;
+    } else {
+      // empty;
+      keys[e.code] = true;
+    }
+    console.log(e.code);
+  });
+
+  document.addEventListener("keyup", (e: KeyboardEvent) => {
+    delete keys[e.code];
+  });
+
   var ctx = canvas.getContext("2d")!;
   const world = new World(ctx, canvas);
   const man = new Man(ctx, 250, 250);
@@ -20,23 +36,20 @@ export async function draw() {
   );
   world.add(man);
   world.add(ground);
-  const keys: Record<string, boolean> = {};
 
-  document.addEventListener("keydown", (e: KeyboardEvent) => {
-    console.log(` ${e.code}`);
-    keys[e.code] = true;
-  });
-
-  document.addEventListener("keyup", (e: KeyboardEvent) => {
-    keys[e.code] = false;
-  });
-
-  for (let n = 0; n < 1000; n++) {
+  const speed = 1;
+  for (let n = 0; n < 2000; n++) {
     await world.draw();
 
-    const speed = 5;
-    if (keys.ArrowUp) man.force.add(new Vector(0, -speed));
-    if (keys.ArrowRight) man.force.add(new Vector(speed, 0));
-    else if (keys.ArrowLeft) man.force.add(new Vector(-speed, 0));
+    if (keys.ArrowUp) {
+      if (man.groundForce.y > -40)
+        man.groundForce.add(new Vector(0, -speed * 30));
+      else keys.ArrowUp = false;
+    }
+    if (keys.ArrowRight) man.groundForce.add(new Vector(speed, 0));
+    else if (keys.ArrowLeft) man.groundForce.add(new Vector(-speed, 0));
+
+    console.log(man.groundForce.y);
+    man.groundForce.multiply(0.5);
   }
 }
