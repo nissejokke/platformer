@@ -35,6 +35,7 @@ export class Man implements Objct {
   height: number;
   mass: number;
   force: Vector;
+  drawCounter: number;
   constructor(private ctx: CanvasRenderingContext2D, x: number, y: number) {
     this.poses = [
       new Pose({
@@ -94,6 +95,7 @@ export class Man implements Objct {
     this.currentPose = 0;
     this.mass = 10;
     this.force = new Vector(0, 0);
+    this.drawCounter = 0;
   }
   collision(obj1: Objct, obj2: Objct): void {}
 
@@ -184,8 +186,12 @@ export class Man implements Objct {
     );
     this.ctx.stroke();
     this.ctx.closePath();
-    this.currentPose++;
-    this.currentPose %= this.poses.length;
+    this.drawCounter++;
+    if (this.drawCounter % 5 === 0) {
+      this.currentPose++;
+      this.currentPose %= this.poses.length;
+      this.drawCounter = 0;
+    }
   }
 
   move(dx: number, dy: number) {

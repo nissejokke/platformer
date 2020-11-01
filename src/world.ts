@@ -1,4 +1,4 @@
-import { Objct, delay } from "./common.js";
+import { Objct, delay, Point } from "./common.js";
 import Vector from "./vector.js";
 
 export class World {
@@ -23,13 +23,15 @@ export class World {
     this.resetCollisionMap();
     for (const obj of this.objs) {
       this.addForces(obj);
+    }
+    for (const obj of this.objs) {
       this.addObjectToCollisionMap(obj);
     }
     for (const obj of this.objs) {
       this.updatePosition(obj);
       obj.draw();
     }
-    await delay(100);
+    await delay(25);
   }
   addForces(obj: Objct) {
     if (obj.mass !== -1)
@@ -57,15 +59,42 @@ export class World {
         const xx = Math.round(this.collisionSize * (x / worldWidth));
         const yy = Math.round(this.collisionSize * (y / worldHeight));
         if (this.collisionMap[xx][yy])
-          return this.collision(this.collisionMap[xx][yy], obj);
+          this.collision(this.collisionMap[xx][yy], obj);
         this.collisionMap[xx][yy] = obj;
       }
     }
   }
 
   collision(obj1: Objct, obj2: Objct) {
-    // console.log("->", obj1, obj2);
-    if (obj1.mass === -1) obj2.force.y = 0;
-    else if (obj2.mass === -1) obj1.force.y = 0;
+    /**
+     * X and Y distance between objects
+     * @param obj1
+     * @param obj2
+     */
+    const distance = (obj1: Objct, obj2: Objct) => {
+      return [
+        Math.min(
+          Math.abs(obj1.x + obj1.width - obj2.x),
+          Math.abs(obj2.x + obj2.width - obj1.x)
+        ),
+        Math.min(
+          Math.abs(obj1.y + obj1.height - obj2.y),
+          Math.abs(obj2.y + obj2.height - obj1.y)
+        ),
+      ];
+    };
+    const interactWithFixedObject = (vector: Vector) => {
+      // friction and collision with fixed object
+      vector.multiply(new Vector(0.9, 0));
+      // compansate for clipping into object
+      vector.add(new Vector(0, -distance(obj1, obj2)[1] * 0.5));
+    };
+
+    if (obj1.mass === -1) {
+      interactWithFixedObject(obj2.force);
+    } else if (obj2.mass === -1) {
+      interactWithFixedObject(obj1.force);
+    } else {
+    }
   }
 }
