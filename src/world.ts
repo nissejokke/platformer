@@ -36,6 +36,7 @@ export class World {
   addForces(obj: Objct) {
     if (obj.mass !== -1)
       // Hack: change to objct type instead of mass == -1 to denote fixed object
+      // Gravity
       obj.force.add(new Vector(0, 2));
   }
 
@@ -68,9 +69,10 @@ export class World {
         const yy = Math.round(this.collisionSize * (y / worldHeight));
 
         if (xx >= 0 && xx < this.collisionMap.length) {
-          if (this.collisionMap[xx][yy])
+          if (this.collisionMap[xx][yy]) {
             this.collision(this.collisionMap[xx][yy], obj);
-          this.collisionMap[xx][yy] = obj;
+            return;
+          } else this.collisionMap[xx][yy] = obj;
         }
       }
     }
@@ -103,13 +105,15 @@ export class World {
 
       // compansate for clipping into object
       //   obj.force.add(new Vector(0, -distance(obj1, obj2)[1] * 0.5));
-      obj.y += -distance(obj1, obj2)[1] * 0.5;
+      const dist = distance(obj1, obj2)[1];
+      obj.y += -dist;
 
       // if in concat with ground, add movement
       if (isGroundMovable(obj)) obj.force.add(obj.groundForce);
 
       // friction
-      obj.force.x *= 0.9;
+      obj.force.x *= 0.7;
+      //   if (Math.abs(obj.force.y) < 1) obj.force.y = 0;
     };
 
     if (obj1.mass === -1) {

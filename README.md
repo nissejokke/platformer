@@ -7,8 +7,8 @@ Experimenting with game physics on html canvas. Use keyboard arrows to run aroun
 
 
 ### TODO:
-  - [ ] Better jumping
+  - [x] Better jumping
   - [x] Apply jumping force only when in contact with fixed object
-  - [ ] Handle out of bounds
+  - [x] Handle out of bounds
   - [ ] add more running animations
   - [ ] Map

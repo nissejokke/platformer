@@ -37,19 +37,57 @@ export async function draw() {
   world.add(man);
   world.add(ground);
 
-  const speed = 1;
+  // speed multiplier
+  const speed = 10;
+
+  // jump force
+  const jumpForce = speed * 10;
+
+  // ground force, applied when in concat with ground
+  const groundForce = speed * 1;
+
+  // ground force limit
+  const groundForceLimit = speed * 10;
+
+  // reduction of ground force every draw
+  const groundForceReduction = 0.25;
+
+  // air movement when changing direction
+  const airForce = speed * 0.75;
+
+  // limit air movement
+  const airForceLimit = speed * 10;
+
   for (let n = 0; n < 2000; n++) {
     await world.draw();
 
+    // jump
     if (keys.ArrowUp) {
-      if (man.groundForce.y > -40)
-        man.groundForce.add(new Vector(0, -speed * 30));
-      else keys.ArrowUp = false;
+      // if (man.groundForce.y > -100)
+      man.groundForce.add(new Vector(0, -jumpForce));
+      // else keys.ArrowUp = false;
     }
-    if (keys.ArrowRight) man.groundForce.add(new Vector(speed, 0));
-    else if (keys.ArrowLeft) man.groundForce.add(new Vector(-speed, 0));
+    // move right
+    if (keys.ArrowRight) {
+      man.groundForce.add(new Vector(groundForce, 0));
+      if (man.force.x <= 0) {
+        man.force.add(new Vector(airForce, 0));
+        man.force.limitTo(airForceLimit);
+      }
+      // move left
+    } else if (keys.ArrowLeft) {
+      man.groundForce.add(new Vector(-groundForce, 0));
+      if (man.force.x >= 0) {
+        man.force.add(new Vector(-airForce, 0));
+        man.force.limitTo(airForceLimit);
+      }
+    }
 
-    console.log(man.groundForce.y);
-    man.groundForce.multiply(0.5);
+    if (man.groundForce.y < -groundForceLimit)
+      man.groundForce.y = -groundForceLimit;
+    man.groundForce.multiply(groundForceReduction);
+
+    // reduce flicker when close to ground
+    if (Math.abs(man.groundForce.y) < 1) man.groundForce.y = 0;
   }
 }

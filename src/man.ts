@@ -107,86 +107,90 @@ export class Man implements Objct, GroundMovable {
     const pose = this.poses[this.currentPose];
     this.ctx.beginPath();
     const joint = pose.joints;
-    const direction = this.force.x < 0 ? -1 : 1;
+    const direction = this.groundForce.x < 0 ? -1 : 1;
+    const offsetx = this.width / 2;
+    const offsety = this.height / 2;
+    const x = this.x + offsetx;
+    const y = this.y + offsety;
     this.ctx.arc(
-      this.x + direction * joint.head.x * this.scale,
-      this.y + joint.head.y * this.scale,
+      x + direction * joint.head.x * this.scale,
+      y + joint.head.y * this.scale,
       50 * this.scale,
       0,
       2 * Math.PI
     );
     this.ctx.moveTo(
-      this.x + direction * joint.neck.x * this.scale,
-      this.y + joint.neck.y * this.scale
+      x + direction * joint.neck.x * this.scale,
+      y + joint.neck.y * this.scale
     );
     // left part
     this.ctx.lineTo(
-      this.x + direction * joint.leftShoulder.x * this.scale,
-      this.y + joint.leftShoulder.y * this.scale
+      x + direction * joint.leftShoulder.x * this.scale,
+      y + joint.leftShoulder.y * this.scale
     );
     this.ctx.lineTo(
-      this.x + direction * joint.leftElbow.x * this.scale,
-      this.y + joint.leftElbow.y * this.scale
+      x + direction * joint.leftElbow.x * this.scale,
+      y + joint.leftElbow.y * this.scale
     );
     this.ctx.lineTo(
-      this.x + direction * joint.leftHand.x * this.scale,
-      this.y + joint.leftHand.y * this.scale
+      x + direction * joint.leftHand.x * this.scale,
+      y + joint.leftHand.y * this.scale
     );
     this.ctx.moveTo(
-      this.x + direction * joint.neck.x * this.scale,
-      this.y + joint.neck.y * this.scale
+      x + direction * joint.neck.x * this.scale,
+      y + joint.neck.y * this.scale
     );
     // right part
     this.ctx.lineTo(
-      this.x + direction * joint.rightShoulder.x * this.scale,
-      this.y + joint.rightShoulder.y * this.scale
+      x + direction * joint.rightShoulder.x * this.scale,
+      y + joint.rightShoulder.y * this.scale
     );
     this.ctx.lineTo(
-      this.x + direction * joint.rightElbow.x * this.scale,
-      this.y + joint.rightElbow.y * this.scale
+      x + direction * joint.rightElbow.x * this.scale,
+      y + joint.rightElbow.y * this.scale
     );
     this.ctx.lineTo(
-      this.x + direction * joint.rightHand.x * this.scale,
-      this.y + joint.rightHand.y * this.scale
+      x + direction * joint.rightHand.x * this.scale,
+      y + joint.rightHand.y * this.scale
     );
     // torso
-    this.ctx.moveTo(this.x, this.y);
+    this.ctx.moveTo(x, y);
     this.ctx.lineTo(
-      this.x + direction * joint.leftShoulder.x * this.scale,
-      this.y + joint.leftShoulder.y * this.scale
+      x + direction * joint.leftShoulder.x * this.scale,
+      y + joint.leftShoulder.y * this.scale
     );
-    this.ctx.moveTo(this.x, this.y);
+    this.ctx.moveTo(x, y);
     this.ctx.lineTo(
-      this.x + direction * joint.rightShoulder.x * this.scale,
-      this.y + joint.rightShoulder.y * this.scale
+      x + direction * joint.rightShoulder.x * this.scale,
+      y + joint.rightShoulder.y * this.scale
     );
     // left leg
-    this.ctx.moveTo(this.x, this.y);
+    this.ctx.moveTo(x, y);
     this.ctx.lineTo(
-      this.x + direction * joint.leftKnee.x * this.scale,
-      this.y + joint.leftKnee.y * this.scale
+      x + direction * joint.leftKnee.x * this.scale,
+      y + joint.leftKnee.y * this.scale
     );
     this.ctx.lineTo(
-      this.x + direction * joint.leftAnkle.x * this.scale,
-      this.y + joint.leftAnkle.y * this.scale
+      x + direction * joint.leftAnkle.x * this.scale,
+      y + joint.leftAnkle.y * this.scale
     );
     this.ctx.lineTo(
-      this.x + direction * joint.leftToe.x * this.scale,
-      this.y + joint.leftToe.y * this.scale
+      x + direction * joint.leftToe.x * this.scale,
+      y + joint.leftToe.y * this.scale
     );
     // right leg
-    this.ctx.moveTo(this.x, this.y);
+    this.ctx.moveTo(x, y);
     this.ctx.lineTo(
-      this.x + direction * joint.rightKnee.x * this.scale,
-      this.y + joint.rightKnee.y * this.scale
+      x + direction * joint.rightKnee.x * this.scale,
+      y + joint.rightKnee.y * this.scale
     );
     this.ctx.lineTo(
-      this.x + direction * joint.rightAnkle.x * this.scale,
-      this.y + joint.rightAnkle.y * this.scale
+      x + direction * joint.rightAnkle.x * this.scale,
+      y + joint.rightAnkle.y * this.scale
     );
     this.ctx.lineTo(
-      this.x + direction * joint.rightToe.x * this.scale,
-      this.y + joint.rightToe.y * this.scale
+      x + direction * joint.rightToe.x * this.scale,
+      y + joint.rightToe.y * this.scale
     );
     this.ctx.stroke();
     this.ctx.closePath();
