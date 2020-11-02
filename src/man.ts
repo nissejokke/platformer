@@ -88,6 +88,22 @@ export class Man implements Objct, GroundMovable {
         rightAnkle: { x: 67, y: 228 },
         rightToe: { x: 128, y: 284 },
       }),
+      new Pose({
+        head: { x: 210, y: -282 },
+        neck: { x: 139, y: -234 },
+        leftShoulder: { x: 49, y: -251 },
+        leftElbow: { x: -87, y: -256 },
+        leftHand: { x: -82, y: -172 },
+        rightShoulder: { x: 157, y: -178 },
+        rightElbow: { x: 164, y: -89 },
+        rightHand: { x: 265, y: -75 },
+        leftKnee: { x: -90, y: 101 },
+        leftAnkle: { x: -264, y: 157 },
+        leftToe: { x: -308, y: 233 },
+        rightKnee: { x: 130, y: 54 },
+        rightAnkle: { x: 177, y: 225 },
+        rightToe: { x: 269, y: 182 },
+      }),
     ];
     this.x = x;
     this.y = y;
