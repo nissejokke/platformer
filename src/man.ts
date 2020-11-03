@@ -119,7 +119,7 @@ export class Man implements Objct, GroundMovable {
   collision(obj1: Objct, obj2: Objct): void {}
 
   draw() {
-    // this.ctx.strokeRect(this.x, this.y, this.width, this.height);
+    this.ctx.strokeRect(this.x, this.y, this.width, this.height);
     const pose = this.poses[this.currentPose];
     this.ctx.beginPath();
     const joint = pose.joints;

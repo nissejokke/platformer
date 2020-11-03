@@ -36,6 +36,7 @@ export async function draw() {
   );
   world.add(man);
   world.add(ground);
+  world.add(new Obstacle(ctx, 100, 50, 50, 50, 100));
 
   // speed multiplier
   const speed = 10;
